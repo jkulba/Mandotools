@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.Build.Traversal/3.1.6">
+    <ItemGroup>
+        <ProjectReference Include="Mando.Tool.ParseJson\Mando.Tool.ParseJson.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Build.Traversal" Version="3.1.6" />
+    </ItemGroup>
+</Project>
