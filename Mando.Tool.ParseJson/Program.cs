@@ -9,43 +9,32 @@ namespace Mando.Tool.ParseJson
     {
         public static void Main(string[] args)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
+            var builder = new ConfigurationBuilder();
+            BuildConfig(builder);
 
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
+                .ReadFrom.Configuration(builder.Build())
                 .CreateLogger();
 
-            try
-            {
-                Log.Information("Starting ParseJson..");
+            Log.Information("Starting ParseJson..");
 
-                var builder = new HostBuilder()
-                    .ConfigureAppConfiguration((hostContext, configAppBulder) =>
-                    {
-                        configAppBulder.AddJsonFile("appsettings.json", optional: false);
-                        configAppBulder.AddEnvironmentVariables();
-                        configAppBulder.AddCommandLine(args);
-                    })
-                    .ConfigureServices((hostContext, services) =>
-                    {
-                        services.AddTransient<IApplication, Application>();
-                    })
-                    .UseSerilog();
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddTransient<IApplication, Application>();
+                })
+                .UseSerilog()
+                .Build();
 
-                builder.Build().Services.GetService<IApplication>().Run();
-
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "ParseJson terminated unexpectantly");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            var svc = ActivatorUtilities.CreateInstance<Application>(host.Services);
+            svc.Run();
         }
 
+        static void BuildConfig(IConfigurationBuilder builder)
+        {
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+        }
     }
 }
