@@ -51,7 +51,7 @@ namespace Mando.Tool.ParseJson
                         }).ToList();
 
                         string jsonString = JsonSerializer.Serialize(destination, new JsonSerializerOptions() { WriteIndented = true });
-                        using (StreamWriter outputFile = new StreamWriter("dataReady.json"))
+                        using (StreamWriter outputFile = new StreamWriter("dataRead.json"))
                         {
                             outputFile.WriteLine(jsonString);
                         }
