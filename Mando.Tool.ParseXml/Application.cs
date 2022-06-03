@@ -15,10 +15,9 @@ namespace Mando.Tool.ParseXml
         {
             Console.WriteLine("Parse Xml data.xml");
 
-            // List<Person> inputdata = new List<Person>();
             People? people = null;
 
-            XmlSerializer serializer = new XmlSerializer(typeof(People));
+            XmlSerializer? serializer = new XmlSerializer(typeof(People));
             using (StreamReader reader = new StreamReader("data.xml"))
             {
                 people = (People)(serializer.Deserialize(reader));
