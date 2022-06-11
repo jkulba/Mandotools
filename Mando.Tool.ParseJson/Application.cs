@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
 namespace Mando.Tool.ParseJson
@@ -32,6 +33,29 @@ namespace Mando.Tool.ParseJson
                         Console.Write("Enter file name: ");
                         filename = Console.ReadLine();
                         Console.WriteLine(filename);
+
+                        List<Person> inputdata = new List<Person>();
+
+                        using (StreamReader r = new StreamReader(filename!))
+                        {
+                            string json = r.ReadToEnd();
+                            inputdata = JsonSerializer.Deserialize<List<Person>>(json);
+                        }
+
+                        List<DataReadyPerson> destination = inputdata.Select(d => new DataReadyPerson
+                        {
+                            CityOfResidence = d.City,
+                            fname = d.Firstname,
+                            lname = d.Lastname,
+                            DataReadPersonId = d.Id
+                        }).ToList();
+
+                        string jsonString = JsonSerializer.Serialize(destination, new JsonSerializerOptions() { WriteIndented = true });
+                        using (StreamWriter outputFile = new StreamWriter("dataRead.json"))
+                        {
+                            outputFile.WriteLine(jsonString);
+                        }
+
                         break;
                     case "2":
                         Console.WriteLine("Option 2");
@@ -62,5 +86,20 @@ namespace Mando.Tool.ParseJson
 
             return output!;
         }
+    }
+
+    public class Person
+    {
+        public int Id { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string City { get; set; }
+    }
+    public class DataReadyPerson
+    {
+        public int DataReadPersonId { get; set; }
+        public string fname { get; set; }
+        public string lname { get; set; }
+        public string CityOfResidence { get; set; }
     }
 }

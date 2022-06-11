@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+    <person>
+        <id>1</id>
+        <firstname>Jim</firstname>
+        <lastname>Kulba</lastname>
+        <city>Ladera Ranch</city>
+    </person>
+    <person>
+        <id>2</id>
+        <firstname>Mary</firstname>
+        <lastname>Smith</lastname>
+        <city>Madison</city>
+    </person>
+</people>
